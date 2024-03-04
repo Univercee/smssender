@@ -6,15 +6,15 @@ import store from '../libs/store';
 import {createApp} from 'vue';
 import App from './App.vue';
 
-import customersTable from './components/customers/show.vue';
 import customerDelete from './components/customers/delete.vue';
 import customerCreate from './components/customers/create.vue';
+import notification from './components/notifications/show.vue';
 
 
 const app = createApp(App);
-app.component('customers-table', customersTable)
 app.component('customer-delete', customerDelete)
 app.component('customer-create', customerCreate)
+app.component('notification', notification)
 app.use(router).use(store);
 
 app.mount("#app");

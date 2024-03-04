@@ -1,5 +1,6 @@
 <template>
     <div class="wrapper">
+        <notification></notification>
         <router-view></router-view>
     </div>
 </template>
@@ -7,7 +8,7 @@
 <script>
     import { mapActions, mapGetters, mapMutations } from 'vuex'
     export default {
-        async created(){
+        async beforeCreate(){
             if(!sessionStorage.getItem('token')){
                 this.logout()
             }

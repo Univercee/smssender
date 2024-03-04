@@ -22,6 +22,8 @@ export default {
           resolve(true)
         })
         .catch((err)=>{
+          console.log(err.data);
+          context.commit("notification/notifyError", err.data.message, { root: true })
           context.commit("logout")
           reject(err)
         })

@@ -34,9 +34,11 @@ export default {
                 }
                 const customer = {...data, id}
                 context.commit("add", customer)
+                context.commit("notification/notifyMessage", response.data.message, { root: true })
                 resolve(response.data)
             })
             .catch((err)=>{
+                context.commit("notification/notifyError", err.data.message, { root: true })
                 reject(err)
             })
         })
@@ -49,9 +51,11 @@ export default {
             )
             .then((response)=>{
                 context.commit("update", data)
+                context.commit("notification/notifyMessage", response.data.message, { root: true })
                 resolve(true)
             })
             .catch((err)=>{
+                context.commit("notification/notifyError", err.data.message, { root: true })
                 reject(err)
             })
         })
@@ -62,9 +66,11 @@ export default {
             axios.delete('/api/customers/'+id)
             .then((response)=>{
                 context.commit("delete", id)
+                context.commit("notification/notifyMessage", response.data.message, { root: true })
                 resolve(true)
             })
             .catch((err)=>{
+                context.commit("notification/notifyError", err.data.message, { root: true })
                 reject(err)
             })
         })

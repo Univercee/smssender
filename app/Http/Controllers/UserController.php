@@ -23,7 +23,9 @@ class UserController extends Controller
                 'token' => $token
             ]);
         } catch (\Throwable $th) {
-            return response()->json($th->getMessage(), 500);
+            return response()->json([
+                "message" => $th->getMessage()
+            ], 500);
         }
         
     }
@@ -35,7 +37,9 @@ class UserController extends Controller
             $user_id = $data['user_id'];
             User::logout($user_id);
         } catch (\Throwable $th) {
-            return response()->json($th->getMessage(), 500);
+            return response()->json([
+                "message" => $th->getMessage()
+            ], 500);
         }
     }
 

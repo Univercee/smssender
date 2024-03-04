@@ -47,7 +47,10 @@ class CustomersController extends Controller
                 'birthdate' => $data['birthdate'],
                 'phone' => $data['phone']
             ]);
-            return response()->json($id, 200);
+            return response()->json([
+                "message" => "Пользователь добавлен",
+                "id" => $id
+            ], 200);
         } catch (\Throwable $th) {
             return response()->json([
                 "message" => $th->getMessage()
@@ -68,7 +71,9 @@ class CustomersController extends Controller
                 'birthdate' => $data['birthdate'],
                 'phone' => $data['phone']
             ]);
-            return response()->json($id, 200);
+            return response()->json([
+                "message" => "Пользователь обновлен"
+            ], 200);
         } catch (\Throwable $th) {
             return response()->json([
                 "message" => $th->getMessage()
@@ -79,8 +84,10 @@ class CustomersController extends Controller
     //
     public function delete(Request $request, int $id){
         try {
-            $deleted = Customer::where('id', $id)->delete();
-            return response()->json($deleted);
+            Customer::where('id', $id)->delete();
+            return response()->json([
+                "message" => "Пользователь удален",
+            ], 200);
         } catch (\Throwable $th) {
             return response()->json([
                 "message" => "Some error occurred"

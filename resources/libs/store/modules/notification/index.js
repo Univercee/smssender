@@ -5,7 +5,8 @@ import actions from './actions'
 export default {
   namespaced: true,
   state: {
-    is_auth: false
+    message: null,
+    type: "error"|"success"|null
   },
   getters,
   mutations,
