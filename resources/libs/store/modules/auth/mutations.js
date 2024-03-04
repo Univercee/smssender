@@ -4,7 +4,7 @@ export default {
         sessionStorage.setItem("token", token)
         axios.defaults.headers.common.Authorization = 'Bearer '+sessionStorage.getItem('token')  
         state.is_auth = true
-        router.push({name: 'customers'})
+        if(router.currentRoute.value.name == 'index') router.push({name: 'customers'})
     },
     logout(state) {
         sessionStorage.removeItem("token")

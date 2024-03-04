@@ -4,9 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Customers extends Model
+class Customer extends Model
 {
 
+    public $timestamps = false;
+    
     /**
      * The attributes that are mass assignable.
      *
@@ -15,7 +17,8 @@ class Customers extends Model
     protected $fillable = [
         'lastname',
         'firstname',
-        'birthdate'
+        'birthdate',
+        'phone'
     ];
 
     /**
@@ -24,6 +27,6 @@ class Customers extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'birthdate' => 'datetime'
+        'birthdate' => 'date:Y-m-d'
     ];
 }

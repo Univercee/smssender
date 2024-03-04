@@ -1,5 +1,7 @@
 <template>
-    <router-view></router-view>
+    <div class="wrapper">
+        <router-view></router-view>
+    </div>
 </template>
 
 <script>
@@ -11,9 +13,6 @@
             }
             if(sessionStorage.getItem('token') && !this.is_auth){
                 await this.CHECK_AUTH();
-                if(!this.is_auth){
-                    this.logout()
-                }
             }
         },
         computed:{
