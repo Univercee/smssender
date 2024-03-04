@@ -9,12 +9,14 @@ import App from './App.vue';
 import customerDelete from './components/customers/delete.vue';
 import customerCreate from './components/customers/create.vue';
 import notification from './components/notifications/show.vue';
+import sendSMS from './components/sms/send.vue';
 
 
-const app = createApp(App);
+const app = createApp(App)
 app.component('customer-delete', customerDelete)
 app.component('customer-create', customerCreate)
 app.component('notification', notification)
+app.component('send-sms', sendSMS)
 app.use(router).use(store);
 
 app.mount("#app");

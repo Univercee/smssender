@@ -8,7 +8,7 @@
 <script>
     import { mapActions, mapGetters, mapMutations } from 'vuex'
     export default {
-        async beforeCreate(){
+        async mounted(){
             if(!sessionStorage.getItem('token')){
                 this.logout()
             }

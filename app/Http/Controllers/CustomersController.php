@@ -38,7 +38,7 @@ class CustomersController extends Controller
     public function create(Request $request){
         try {
             $data = $request->all();
-            if(!$data['firstname'] || !$data['lastname'] || !$data['birthdate'] || !$data['phone']){
+            if(!isset($data['firstname']) || !isset($data['lastname']) || !isset($data['birthdate']) || !isset($data['phone'])){
                 throw new Error("Заполните все поля");
             }
             $id = Customer::insertGetId([
@@ -62,7 +62,7 @@ class CustomersController extends Controller
     public function update(Request $request, int $id){
         try {
             $data = $request->all();
-            if(!$data['firstname'] || !$data['lastname'] || !$data['birthdate'] || !$data['phone']){
+            if(!isset($data['firstname']) || !isset($data['lastname']) || !isset($data['birthdate']) || !isset($data['phone'])){
                 throw new Error("Заполните все поля");
             }
             $id = Customer::where('id', $id)->update([

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CustomersController;
+use App\Http\Controllers\SMSController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -31,4 +32,9 @@ Route::group(['prefix' => 'auth'], function(){
         Route::get('/logout', [UserController::class, 'logout']);
         Route::get('/check', function(){});
     });
+});
+
+Route::group(['prefix' => 'sms', 'middleware' => ['auth']], function(){
+    Route::get('/balance', [SMSController::class, 'getBalance']);
+    Route::post('/send', [SMSController::class, 'send']);
 });

@@ -1,7 +1,7 @@
 <template>
     <div v-if="this.message" class="notification" :class="{'success': this.type=='message', 'danger': this.type=='error'}">
         <i @click="clear()" class="fa-solid fa-xmark x-mark"></i>
-        <p>{{ message }}</p>
+        <p v-html="message"></p>
     </div>
 </template>
 
