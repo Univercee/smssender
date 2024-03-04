@@ -36,8 +36,24 @@ class Token extends Model
         'created_at' => 'datetime'
     ];
 
-    public static function generate(){
+    //
+    private static function generate(){
         $token = bin2hex(random_bytes(16));
         return $token;
+    }
+
+    //
+    public static function setToken(int $user_id){
+        $token = self::generate();
+        Token::insert([
+            'token' => $token,
+            'user_id' => $user_id
+        ]);
+        return $token;
+    }
+
+    //
+    public static function removeToken(int $user_id){
+        Token::where('user_id', $user_id)->delete();
     }
 }

@@ -4,8 +4,8 @@ import actions from './actions'
 
 export default {
   namespaced: true,
-  user: {
-    id: null
+  state: {
+    isAuth: false
   },
   getters,
   mutations,

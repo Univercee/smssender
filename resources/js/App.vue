@@ -3,7 +3,27 @@
 </template>
 
 <script>
-
+    import { mapActions, mapGetters, mapMutations } from 'vuex'
+    export default {
+        async created(){
+            if(!sessionStorage.getItem('token')){
+                this.logout()
+            }
+            if(sessionStorage.getItem('token') && !this.is_auth){
+                await this.CHECK_AUTH();
+                if(!this.is_auth){
+                    this.logout()
+                }
+            }
+        },
+        computed:{
+            ...mapGetters('auth', ['is_auth'])
+        },
+        methods:{
+            ...mapActions('auth', ['CHECK_AUTH']),
+            ...mapMutations('auth', ['logout'])
+        }
+    }
 </script>
 
 <style>
