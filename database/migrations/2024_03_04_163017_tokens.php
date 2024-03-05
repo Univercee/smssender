@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger("user_id")->nullable(false);
             $table->string("token")->nullable(false);
             $table->timestamp("created_at")->default(DB::raw('NOW()'))->nullable(false);
-            $table->timestamp("expires_at")->default(DB::raw('DATE_ADD(NOW(), INTERVAL 1 DAY)'))->nullable(false);
+            $table->timestamp("expires_at")->nullable(false);
 
             $table->foreign('user_id')->references('id')->on('users');
             $table->unique(['user_id', 'token']);

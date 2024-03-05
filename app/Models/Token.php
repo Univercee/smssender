@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Token extends Model
@@ -47,7 +48,8 @@ class Token extends Model
         $token = self::generate();
         Token::insert([
             'token' => $token,
-            'user_id' => $user_id
+            'user_id' => $user_id,
+            'expires_at' => Carbon::now()->addDays(1)
         ]);
         return $token;
     }
