@@ -55,7 +55,7 @@
                     </div>
                 </td>
                 <td><customer-delete :id="customer.id"></customer-delete></td>
-                <td><send-sms :phone="customer.phone"></send-sms></td>
+                <td><send-sms :phone="customer.phone" :name="customer.firstname+' '+customer.lastname"></send-sms></td>
             </tr>
         </tbody>
     </table>
@@ -130,5 +130,8 @@
     }
     tr:nth-child(odd) {
         background-color: #FFF;
+    }
+    i{
+        cursor: pointer;
     }
 </style>

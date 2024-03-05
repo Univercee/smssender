@@ -56,6 +56,7 @@ export default {
             })
             .catch((err)=>{
                 context.commit("notification/notifyError", err.data.message, { root: true })
+                context.dispatch('FETCH_ALL')
                 reject(err)
             })
         })

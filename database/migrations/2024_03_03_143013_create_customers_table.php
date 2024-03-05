@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string("firstname")->nullable(false);
             $table->string("lastname")->nullable(false);
             $table->date("birthdate")->nullable(false);
-            $table->string("phone")->nullable(false);
+            $table->string("phone")->nullable(false)->unique();
         });
     }
 

@@ -5,12 +5,13 @@
 <script>
 import { mapActions } from 'vuex'
 export default {
-    props: ['phone'],
+    props: ['phone', 'name'],
     methods: {
         ...mapActions('sms', ['SEND_SMS']),
         submit(){
             this.SEND_SMS({
-                phone: this.phone
+                phone: this.phone,
+                name: this.name
             })
         }
     }

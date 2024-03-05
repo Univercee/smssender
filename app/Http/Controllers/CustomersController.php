@@ -41,6 +41,13 @@ class CustomersController extends Controller
             if(!isset($data['firstname']) || !isset($data['lastname']) || !isset($data['birthdate']) || !isset($data['phone'])){
                 throw new Error("Заполните все поля");
             }
+            $existed_user =  Customer::where('phone', $data['phone'])->first();
+            if($existed_user){
+                throw new Error("Пользователь с таким номером уже существует");
+            }
+            if(!preg_match('/^\+(?:[0-9] ?){6,14}[0-9]$/', $data['phone'])){
+                throw new Error("Неверный формат телефона");
+            }
             $id = Customer::insertGetId([
                 'firstname' => $data['firstname'],
                 'lastname' => $data['lastname'],
@@ -62,8 +69,15 @@ class CustomersController extends Controller
     public function update(Request $request, int $id){
         try {
             $data = $request->all();
-            if(!isset($data['firstname']) || !isset($data['lastname']) || !isset($data['birthdate']) || !isset($data['phone'])){
+            if(!isset($data["id"]) || !isset($data['firstname']) || !isset($data['lastname']) || !isset($data['birthdate']) || !isset($data['phone'])){
                 throw new Error("Заполните все поля");
+            }
+            $existed_user =  Customer::where('phone', $data['phone'])->first();
+            if($existed_user && $existed_user->id != $data["id"]){
+                throw new Error("Пользователь с таким номером уже существует");
+            }
+            if(!preg_match('/^\+(?:[0-9] ?){6,14}[0-9]$/', $data['phone'])){
+                throw new Error("Неверный формат телефона");
             }
             $id = Customer::where('id', $id)->update([
                 'firstname' => $data['firstname'],
