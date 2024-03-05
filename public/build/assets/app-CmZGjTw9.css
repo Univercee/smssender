@@ -1,0 +1,1 @@
+.wrapper{display:flex;flex-direction:column;justify-content:center;align-items:center;margin:1rem;gap:3rem}@media screen and (max-width: 1070px){.wrapper{align-items:start;overflow-x:scroll}.wrapper-index{align-items:center!important;overflow:auto!important}}
