@@ -33,10 +33,12 @@ class SendSMS extends Command
      */
     public function handle()
     {
-        $users = Customer::where('birthdate', Carbon::now()->toDateString())->get();
+        $today = Carbon::now();
+        $users = Customer::WhereMonth('birthdate', $today->month)->WhereDay('birthdate',$today->day)->get();
         foreach($users as $user){
             $phone = $user->phone;
             SMSC::send_sms($phone, Mails::getBirthdayMessage($user->firstname." ".$user->lastname), 1);
         }
+        return count($users);
     }
 }

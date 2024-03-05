@@ -35,10 +35,10 @@
                     <div class="d-flex align-items-center justify-content-center" style="gap: .3rem;">
                         Дата рождения
                     </div>
-                </th>
+                </th>   
                 <th></th>
                 <th></th>
-                <th></th>
+                <th><button @click="SEND_ALL_SMS()">Отправить поздравления</button></th>
             </tr>
         </thead>
         <tbody>
@@ -81,7 +81,7 @@
         },
         methods:{
             ...mapActions('customers', ['FETCH_ALL', 'UPDATE']),
-            ...mapActions('sms', ['FETCH_BALANCE']),
+            ...mapActions('sms', ['FETCH_BALANCE', 'SEND_ALL_SMS']),
             ...mapMutations('auth', ['logout']),
             formatDate(datetime){
                 let options = { year: 'numeric', month: 'numeric', day: 'numeric' };

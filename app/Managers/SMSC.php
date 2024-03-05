@@ -1,34 +1,34 @@
 <?php
 namespace App\Managers;
-// SMSC.RU API (smsc.ru) ������ 3.8 (03.07.2019)
-define("SMSC_LOGIN", env('SMSC_LOGIN'));			// ����� �������
-define("SMSC_PASSWORD", env('SMSC_PASSWORD'));	// ������
-define("SMSC_POST", 0);					// ������������ ����� POST
-define("SMSC_HTTPS", 0);				// ������������ HTTPS ��������
-define("SMSC_CHARSET", "utf-8");	// ��������� ���������: utf-8, koi8-r ��� windows-1251 (�� ���������)
-define("SMSC_DEBUG", 0);				// ���� �������
-define("SMTP_FROM", "api@smsc.ru");     // e-mail ����� �����������
+// SMSC.RU API (smsc.ru)        3.8 (03.07.2019)
+define("SMSC_LOGIN", env('SMSC_LOGIN'));			//              
+define("SMSC_PASSWORD", env('SMSC_PASSWORD'));	//       
+define("SMSC_POST", 0);					//                    POST
+define("SMSC_HTTPS", 0);				//              HTTPS         
+define("SMSC_CHARSET", "utf-8");	//                    : utf-8, koi8-r     windows-1251 (            )
+define("SMSC_DEBUG", 0);				//             
+define("SMTP_FROM", "api@smsc.ru");     // e-mail                  
 
 class SMSC {
-	// ������� �������� SMS
+	//                  SMS
 //
-// ������������ ���������:
+//                       :
 //
-// $phones - ������ ��������� ����� ������� ��� ����� � �������
-// $message - ������������ ���������
+// $phones -                                                   
+// $message -                       
 //
-// �������������� ���������:
+//                         :
 //
-// $translit - ���������� ��� ��� � �������� (1,2 ��� 0)
-// $time - ����������� ����� �������� � ���� ������ (DDMMYYhhmm, h1-h2, 0ts, +m)
-// $id - ������������� ���������. ������������ ����� 32-������ ����� � ��������� �� 1 �� 2147483647.
-// $format - ������ ��������� (0 - ������� sms, 1 - flash-sms, 2 - wap-push, 3 - hlr, 4 - bin, 5 - bin-hex, 6 - ping-sms, 7 - mms, 8 - mail, 9 - call, 10 - viber, 11 - soc)
-// $sender - ��� ����������� (Sender ID).
-// $query - ������ �������������� ����������, ����������� � URL-������ ("valid=01:00&maxsms=3&tz=2")
-// $files - ������ ����� � ������ ��� �������� mms ��� e-mail ���������
+// $translit -                               (1,2     0)
+// $time -                                          (DDMMYYhhmm, h1-h2, 0ts, +m)
+// $id -                        .                    32-                            1    2147483647.
+// $format -                  (0 -         sms, 1 - flash-sms, 2 - wap-push, 3 - hlr, 4 - bin, 5 - bin-hex, 6 - ping-sms, 7 - mms, 8 - mail, 9 - call, 10 - viber, 11 - soc)
+// $sender -                 (Sender ID).
+// $query -                                 ,               URL-       ("valid=01:00&maxsms=3&tz=2")
+// $files -                                    mms     e-mail          
 //
-// ���������� ������ (<id>, <���������� sms>, <���������>, <������>) � ������ �������� ��������
-// ���� ������ (<id>, -<��� ������>) � ������ ������
+//                   (<id>, <           sms>, <         >, <      >)                           
+//             (<id>, -<          >)                
 
 public static function send_sms($phones, $message, $translit = 0, $time = 0, $id = 0, $format = 0, $sender = false, $query = "", $files = array())
 {
@@ -39,40 +39,40 @@ public static function send_sms($phones, $message, $translit = 0, $time = 0, $id
 					($sender === false ? "" : "&sender=".urlencode($sender)).
 					($time ? "&time=".urlencode($time) : "").($query ? "&$query" : ""), $files);
 
-	// (id, cnt, cost, balance) ��� (id, -error)
+	// (id, cnt, cost, balance)     (id, -error)
 
 	if (SMSC_DEBUG) {
 		if ($m[1] > 0)
-			echo "��������� ���������� �������. ID: $m[0], ����� SMS: $m[1], ���������: $m[2], ������: $m[3].\n";
+			echo "                            . ID: $m[0],       SMS: $m[1],          : $m[2],       : $m[3].\n";
 		else
-			echo "������ �", -$m[1], $m[0] ? ", ID: ".$m[0] : "", "\n";
+			echo "        ", -$m[1], $m[0] ? ", ID: ".$m[0] : "", "\n";
 	}
 
 	return $m;
 }
 
-// SMTP ������ ������� �������� SMS
+// SMTP                         SMS
 
 public static function send_sms_mail($phones, $message, $translit = 0, $time = 0, $id = 0, $format = 0, $sender = "")
 {
 	return mail("send@send.smsc.ru", "", SMSC_LOGIN.":".SMSC_PASSWORD.":$id:$time:$translit,$format,$sender:$phones:$message", "From: ".SMTP_FROM."\nContent-Type: text/plain; charset=".SMSC_CHARSET."\n");
 }
 
-// ������� ��������� ��������� SMS
+//                             SMS
 //
-// ������������ ���������:
+//                       :
 //
-// $phones - ������ ��������� ����� ������� ��� ����� � �������
-// $message - ������������ ���������
+// $phones -                                                   
+// $message -                       
 //
-// �������������� ���������:
+//                         :
 //
-// $translit - ���������� ��� ��� � �������� (1,2 ��� 0)
-// $format - ������ ��������� (0 - ������� sms, 1 - flash-sms, 2 - wap-push, 3 - hlr, 4 - bin, 5 - bin-hex, 6 - ping-sms, 7 - mms, 8 - mail, 9 - call, 10 - viber, 11 - soc)
-// $sender - ��� ����������� (Sender ID)
-// $query - ������ �������������� ����������, ����������� � URL-������ ("list=79999999999:��� ������: 123\n78888888888:��� ������: 456")
+// $translit -                               (1,2     0)
+// $format -                  (0 -         sms, 1 - flash-sms, 2 - wap-push, 3 - hlr, 4 - bin, 5 - bin-hex, 6 - ping-sms, 7 - mms, 8 - mail, 9 - call, 10 - viber, 11 - soc)
+// $sender -                 (Sender ID)
+// $query -                                 ,               URL-       ("list=79999999999:          : 123\n78888888888:          : 456")
 //
-// ���������� ������ (<���������>, <���������� sms>) ���� ������ (0, -<��� ������>) � ������ ������
+//                   (<         >, <           sms>)             (0, -<          >)                
 
 public static function get_sms_cost($phones, $message, $translit = 0, $format = 0, $sender = false, $query = "")
 {
@@ -82,59 +82,59 @@ public static function get_sms_cost($phones, $message, $translit = 0, $format = 
 					($sender === false ? "" : "&sender=".urlencode($sender)).
 					"&translit=$translit".($format > 0 ? "&".$formats[$format] : "").($query ? "&$query" : ""));
 
-	// (cost, cnt) ��� (0, -error)
+	// (cost, cnt)     (0, -error)
 
 	if (SMSC_DEBUG) {
 		if ($m[1] > 0)
-			echo "��������� ��������: $m[0]. ����� SMS: $m[1]\n";
+			echo "                  : $m[0].       SMS: $m[1]\n";
 		else
-			echo "������ �", -$m[1], "\n";
+			echo "        ", -$m[1], "\n";
 	}
 
 	return $m;
 }
 
-// ������� �������� ������� ������������� SMS ��� HLR-�������
+//                                        SMS     HLR-       
 //
-// $id - ID c�������� ��� ������ ID ����� �������
-// $phone - ����� �������� ��� ������ ������� ����� �������
-// $all - ������� ��� ������ ������������� SMS, ������� ����� ��������� (0,1 ��� 2)
+// $id - ID c                    ID              
+// $phone -                                                
+// $all -                                  SMS,                         (0,1     2)
 //
-// ���������� ������ (��� �������������� ������� ��������� ������):
+//                   (                                           ):
 //
-// ��� ���������� SMS-���������:
-// (<������>, <����� ���������>, <��� ������ ��������>)
+//                SMS-         :
+// (<      >, <               >, <                   >)
 //
-// ��� HLR-�������:
-// (<������>, <����� ���������>, <��� ������ sms>, <��� IMSI SIM-�����>, <����� ������-������>, <��� ������ �����������>, <��� ���������>,
-// <�������� ������ �����������>, <�������� ���������>, <�������� ����������� ������>, <�������� ������������ ���������>)
+//     HLR-       :
+// (<      >, <               >, <           sms>, <    IMSI SIM-     >, <            -      >, <                      >, <             >,
+// <                           >, <                  >, <                           >, <                               >)
 //
-// ��� $all = 1 ������������� ������������ �������� � ����� �������:
-// (<����� ��������>, <����� ��������>, <���������>, <sender id>, <�������� �������>, <����� ���������>)
+//     $all = 1                                                    :
+// (<              >, <              >, <         >, <sender id>, <                >, <               >)
 //
-// ��� $all = 2 ������������� ������������ �������� <������>, <��������> � <������>
+//     $all = 2                                     <      >, <        >   <      >
 //
-// ��� ������������� �������:
-// ���� $all = 0, �� ��� ������� ��������� ��� HLR-������� ������������� ������������ <ID ���������> � <����� ��������>
+//                          :
+//      $all = 0,                              HLR-                                   <ID          >   <              >
 //
-// ���� $all = 1 ��� $all = 2, �� � ����� ����������� <ID ���������>
+//      $all = 1     $all = 2,                        <ID          >
 //
-// ���� ������ (0, -<��� ������>) � ������ ������
+//             (0, -<          >)                
 
 public static function get_status($id, $phone, $all = 0)
 {
 	$m = self::_smsc_send_cmd("status", "phone=".urlencode($phone)."&id=".urlencode($id)."&all=".(int)$all);
 
-	// (status, time, err, ...) ��� (0, -error)
+	// (status, time, err, ...)     (0, -error)
 
 	if (!strpos($id, ",")) {
 		if (SMSC_DEBUG )
 			if ($m[1] != "" && $m[1] >= 0)
-				echo "������ SMS = $m[0]", $m[1] ? ", ����� ��������� ������� - ".date("d.m.Y H:i:s", $m[1]) : "", "\n";
+				echo "       SMS = $m[0]", $m[1] ? ",                         - ".date("d.m.Y H:i:s", $m[1]) : "", "\n";
 			else
-				echo "������ �", -$m[1], "\n";
+				echo "        ", -$m[1], "\n";
 
-		if ($all && count($m) > 9 && (!isset($m[$idx = $all == 1 ? 14 : 17]) || $m[$idx] != "HLR")) // ',' � ���������
+		if ($all && count($m) > 9 && (!isset($m[$idx = $all == 1 ? 14 : 17]) || $m[$idx] != "HLR")) // ','            
 			$m = explode(",", implode(",", $m), $all == 1 ? 9 : 12);
 	}
 	else {
@@ -148,30 +148,30 @@ public static function get_status($id, $phone, $all = 0)
 	return $m;
 }
 
-// ������� ��������� �������
+//                          
 //
-// ��� ����������
+//               
 //
-// ���������� ������ � ���� ������ ��� false � ������ ������
+//                                     false                
 
 public static function get_balance()
 {
-	$m = self::_smsc_send_cmd("balance"); // (balance) ��� (0, -error)
+	$m = self::_smsc_send_cmd("balance"); // (balance)     (0, -error)
 
 	if (SMSC_DEBUG) {
 		if (!isset($m[1]))
-			echo "����� �� �����: ", $m[0], "\n";
+			echo "              : ", $m[0], "\n";
 		else
-			echo "������ �", -$m[1], "\n";
+			echo "        ", -$m[1], "\n";
 	}
 
 	return isset($m[1]) ? false : $m[0];
 }
 
 
-// ���������� �������
+//                   
 
-// ������� ������ �������. ��������� URL � ������ 5 ������� ������ ����� ������ ����������� � �������
+//                       .           URL          5                                                  
 
 public static function _smsc_send_cmd($cmd, $arg = "", $files = array())
 {
@@ -188,9 +188,9 @@ public static function _smsc_send_cmd($cmd, $arg = "", $files = array())
 
 	if ($ret == "") {
 		if (SMSC_DEBUG)
-			echo "������ ������ ������: $url\n";
+			echo "                    : $url\n";
 
-		$ret = ","; // ��������� �����
+		$ret = ","; //                
 	}
 
 	$delim = ",";
@@ -205,8 +205,8 @@ public static function _smsc_send_cmd($cmd, $arg = "", $files = array())
 	return explode($delim, $ret);
 }
 
-// ������� ������ URL. ��� ������ ������ ���� ��������:
-// curl ��� fsockopen (������ http) ��� �������� ����� allow_url_fopen ��� file_get_contents
+//                URL.                                :
+// curl     fsockopen (       http)                    allow_url_fopen     file_get_contents
 
 public static function _smsc_read_url($url, $files, $tm = 5)
 {
@@ -255,7 +255,7 @@ public static function _smsc_read_url($url, $files, $tm = 5)
 	}
 	elseif ($files) {
 		if (SMSC_DEBUG)
-			echo "�� ���������� ������ curl ��� �������� ������\n";
+			echo "                     curl                    \n";
 	}
 	else {
 		if (!SMSC_HTTPS && function_exists("fsockopen"))
@@ -286,13 +286,13 @@ public static function _smsc_read_url($url, $files, $tm = 5)
 
 // Examples:
 // include "smsc_api.php";
-// list($sms_id, $sms_cnt, $cost, $balance) = send_sms("79999999999", "��� ������: 123", 1);
+// list($sms_id, $sms_cnt, $cost, $balance) = send_sms("79999999999", "          : 123", 1);
 // list($sms_id, $sms_cnt, $cost, $balance) = send_sms("79999999999", "http://smsc.ru\nSMSC.RU", 0, 0, 0, 0, false, "maxsms=3");
 // list($sms_id, $sms_cnt, $cost, $balance) = send_sms("79999999999", "0605040B8423F0DC0601AE02056A0045C60C036D79736974652E72750001036D7973697465000101", 0, 0, 0, 5, false);
 // list($sms_id, $sms_cnt, $cost, $balance) = send_sms("79999999999", "", 0, 0, 0, 3, false);
-// list($sms_id, $sms_cnt, $cost, $balance) = send_sms("dest@mysite.com", "��� ������: 123", 0, 0, 0, 8, "source@mysite.com", "subj=Confirmation");
-// list($cost, $sms_cnt) = get_sms_cost("79999999999", "�� ������� ����������������!");
-// send_sms_mail("79999999999", "��� ������: 123", 0, "0101121000");
+// list($sms_id, $sms_cnt, $cost, $balance) = send_sms("dest@mysite.com", "          : 123", 0, 0, 0, 8, "source@mysite.com", "subj=Confirmation");
+// list($cost, $sms_cnt) = get_sms_cost("79999999999", "                           !");
+// send_sms_mail("79999999999", "          : 123", 0, "0101121000");
 // list($status, $time) = get_status($sms_id, "79999999999");
 // $balance = get_balance();
 }

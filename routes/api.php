@@ -37,4 +37,5 @@ Route::group(['prefix' => 'auth'], function(){
 Route::group(['prefix' => 'sms', 'middleware' => ['auth']], function(){
     Route::get('/balance', [SMSController::class, 'getBalance']);
     Route::post('/send', [SMSController::class, 'send']);
+    Route::post('/send-all', [SMSController::class, 'sendAll']);
 });
